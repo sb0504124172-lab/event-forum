@@ -1,74 +1,284 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EventPro — פורום מארגני אירועים</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #F7F8FA; color: #1B2A4A; direction: rtl; }
-    header { background: #1B2A4A; color: #fff; padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
-    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; }
-    .logo-icon { width: 32px; height: 32px; background: #C8952A; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-    .stats-bar { background: #FDF3E0; border-bottom: 1px solid #EDD99A; padding: 10px 32px; display: flex; gap: 32px; }
-    .stat-num { font-weight: 800; color: #C8952A; margin-left: 6px; }
-    main { max-width: 900px; margin: 32px auto; padding: 0 32px; }
-    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-    h2 { font-size: 22px; font-weight: 700; }
-    .btn { background: #C8952A; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; font-family: inherit; }
-    .btn:hover { background: #b07a1e; }
-    .post-card { background: #fff; border: 1px solid #E2E6ED; border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; display: flex; gap: 14px; cursor: pointer; transition: box-shadow 0.15s; }
-    .post-card:hover { box-shadow: 0 4px 16px rgba(27,42,74,0.08); }
-    .avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; flex-shrink: 0; font-size: 16px; }
-    .post-title { font-weight: 600; font-size: 15px; margin-bottom: 6px; }
-    .post-meta { font-size: 13px; color: #9BA8BC; }
-    .badge { background: #EEF1F6; color: #6B7A96; padding: 2px 10px; border-radius: 20px; font-size: 12px; margin-left: 8px; }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 200; }
-    .modal { background: #fff; border-radius: 16px; padding: 32px; width: 90%; max-width: 520px; }
-    .modal h3 { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
-    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 14px; border: 1.5px solid #E2E6ED; border-radius: 8px; font-size: 14px; font-family: inherit; direction: rtl; outline: none; }
-    .form-group textarea { min-height: 100px; resize: vertical; }
-    .modal-footer { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
-    .btn-cancel { background: #EEF1F6; color: #6B7A96; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 14px; }
-    .loading { text-align: center; padding: 60px; color: #9BA8BC; font-size: 16px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>אירועים IL – הקהילה של מארגני האירועים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #111111;
+    --accent: #c9a84c;
+    --accent-light: #fdf6e3;
+    --text: #111111;
+    --text-muted: #777777;
+    --border: #e0e0e0;
+    --bg: #f7f7f7;
+    --white: #ffffff;
+    --success: #2e7d4f;
+    --success-light: #eaf4ee;
+  }
+  body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  a { text-decoration: none; color: inherit; }
+
+  .topbar { background: #111; color: #fff; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--accent); }
+  .logo { font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .logo span.accent { color: var(--accent); }
+  .topnav { display: flex; align-items: center; gap: 1.5rem; font-size: 0.92rem; }
+  .topnav a { color: rgba(255,255,255,0.85); transition: color 0.2s; }
+  .topnav a:hover { color: #fff; }
+  .btn-login { background: var(--accent); color: #fff; border: none; padding: 7px 18px; border-radius: 6px; font-family: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; }
+
+  .hero { background: #111; color: #fff; text-align: center; padding: 3.5rem 2rem 3rem; border-bottom: 3px solid var(--accent); }
+  .hero h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .hero p { font-size: 1.05rem; color: rgba(255,255,255,0.8); max-width: 560px; margin: 0 auto 1.8rem; }
+  .hero-search { display: flex; gap: 10px; max-width: 500px; margin: 0 auto; }
+  .hero-search input { flex: 1; padding: 11px 16px; border-radius: 8px; border: none; font-family: inherit; font-size: 0.95rem; }
+  .hero-search button { background: var(--accent); color: #fff; border: none; padding: 11px 20px; border-radius: 8px; font-family: inherit; font-weight: 600; cursor: pointer; }
+  .hero-stats { display: flex; justify-content: center; gap: 2.5rem; margin-top: 2rem; }
+  .hero-stat strong { display: block; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+  .hero-stat span { font-size: 0.82rem; color: rgba(255,255,255,0.7); }
+
+  .main-layout { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem; }
+  @media (max-width: 768px) { .main-layout { grid-template-columns: 1fr; } }
+
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .section-title { font-size: 1.05rem; font-weight: 600; color: #111; display: flex; align-items: center; gap: 8px; }
+
+  .tabs { display: flex; gap: 4px; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 4px; margin-bottom: 1rem; }
+  .tab { flex: 1; text-align: center; padding: 8px 12px; border-radius: 6px; font-size: 0.88rem; font-weight: 500; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
+  .tab.active { background: #111; color: #fff; }
+
+  .thread-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; gap: 1rem; transition: box-shadow 0.2s; cursor: pointer; }
+  .thread-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .thread-avatar { width: 42px; height: 42px; border-radius: 50%; background: #111; color: var(--accent); font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .thread-body { flex: 1; min-width: 0; }
+  .thread-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .thread-title { font-size: 0.97rem; font-weight: 600; color: var(--text); line-height: 1.4; }
+  .thread-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .thread-stats { display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
+  .thread-stat strong { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text); }
+  .thread-stat span { font-size: 0.72rem; color: var(--text-muted); }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+  .badge-cat { background: #111; color: var(--accent); }
+
+  .btn-new-thread { width: 100%; background: #111; color: #fff; border: 2px solid var(--accent); padding: 11px; border-radius: 8px; font-family: inherit; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 1rem; }
+  .btn-new-thread:hover { background: #222; }
+
+  .sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+  .widget { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; }
+  .widget-title { font-size: 0.92rem; font-weight: 600; color: #111; margin-bottom: 0.9rem; display: flex; align-items: center; gap: 7px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+
+  .cat-list { display: flex; flex-direction: column; gap: 6px; }
+  .cat-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--bg); border-radius: 7px; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; }
+  .cat-item:hover { background: #111; color: #fff; }
+  .cat-item-left { display: flex; align-items: center; gap: 9px; }
+  .cat-item i { font-size: 18px; color: var(--accent); }
+  .cat-count { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+  .supplier-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .supplier-item:last-child { border-bottom: none; }
+  .supplier-avatar { width: 38px; height: 38px; border-radius: 8px; background: #111; color: var(--accent); font-weight: 700; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .supplier-name { font-size: 0.9rem; font-weight: 600; }
+  .supplier-type { font-size: 0.78rem; color: var(--text-muted); }
+  .supplier-stars { font-size: 0.78rem; color: var(--accent); margin-top: 2px; }
+
+  footer { background: #111; color: rgba(255,255,255,0.75); text-align: center; padding: 2rem; font-size: 0.85rem; margin-top: 3rem; border-top: 3px solid var(--accent); }
+  footer strong { color: #fff; }
+
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: 14px; padding: 2rem; width: 90%; max-width: 520px; }
+  .modal h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: #111; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.88rem; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 13px; border: 1px solid var(--border); border-radius: 7px; font-family: inherit; font-size: 0.93rem; outline: none; }
+  .form-group textarea { min-height: 110px; resize: vertical; }
+  .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem; }
+  .btn-cancel { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 9px 18px; border-radius: 7px; font-family: inherit; font-size: 0.9rem; cursor: pointer; }
+  .btn-submit { background: #111; color: #fff; border: 2px solid var(--accent); padding: 9px 22px; border-radius: 7px; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+  .loading { text-align: center; padding: 3rem; color: var(--text-muted); }
+</style>
 </head>
 <body>
-<header>
-  <div class="logo"><div class="logo-icon">🎪</div> EventPro</div>
-</header>
-<div class="stats-bar">
-  <span><span class="stat-num" id="stat-posts">0</span> פוסטים</span>
-  <span>קהילת מארגני אירועים</span>
-</div>
-<main>
-  <div class="header-row">
-    <h2>פורום מארגנים</h2>
-    <button class="btn" onclick="openModal()">+ פוסט חדש</button>
-  </div>
-  <div id="posts-list"><div class="loading">טוען...</div></div>
-</main>
 
-<div id="modal" class="modal-overlay" style="display:none">
-  <div class="modal">
-    <h3>פוסט חדש</h3>
-    <div class="form-group"><label>שם</label><input id="inp-author" placeholder="שם מלא"></div>
-    <div class="form-group"><label>כותרת</label><input id="inp-title" placeholder="כותרת הפוסט"></div>
-    <div class="form-group"><label>קטגוריה</label>
-      <select id="inp-cat"><option>כללי</option><option>שאלות וטיפים</option><option>ספקים מומלצים</option></select>
+<nav class="topbar">
+  <div class="logo">🎪 <span>אירועים</span><span class="accent">IL</span></div>
+  <div class="topnav">
+    <a href="#">פורום</a>
+    <a href="#">ספקים</a>
+    <a href="#">מדריכים</a>
+    <a href="#">צ'קליסטים</a>
+    <button class="btn-login" onclick="openModal('loginModal')">הצטרפות / כניסה</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>הקהילה של מארגני האירועים</h1>
+  <p>שאלות, המלצות, ספקים מובילים וכל מה שצריך לארגן אירועים מוצלחים</p>
+  <div class="hero-search">
+    <input type="text" placeholder="חפש נושא, ספק, שאלה..." id="searchInput" oninput="filterPosts()">
+    <button onclick="filterPosts()">חיפוש</button>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong id="stat-posts">0</strong><span>דיונים</span></div>
+    <div class="hero-stat"><strong>1,240</strong><span>חברים</span></div>
+    <div class="hero-stat"><strong>312</strong><span>ספקים</span></div>
+  </div>
+</div>
+
+<div class="main-layout">
+  <main>
+    <button class="btn-new-thread" onclick="openModal('newThreadModal')">
+      <i class="ti ti-plus"></i> פתח דיון חדש
+    </button>
+
+    <div class="tabs">
+      <div class="tab active" onclick="setTab(this,'הכל')">הכל</div>
+      <div class="tab" onclick="setTab(this,'שאלות וטיפים')">שאלות וטיפים</div>
+      <div class="tab" onclick="setTab(this,'ספקים מומלצים')">ספקים מומלצים</div>
+      <div class="tab" onclick="setTab(this,'כללי')">כללי</div>
     </div>
-    <div class="form-group"><label>תוכן</label><textarea id="inp-content" placeholder="תוכן הפוסט..."></textarea></div>
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()">ביטול</button>
-      <button class="btn" onclick="submitPost()">פרסם</button>
+
+    <div id="posts-list"><div class="loading">טוען דיונים...</div></div>
+  </main>
+
+  <aside class="sidebar">
+    <div class="widget">
+      <div class="widget-title"><i class="ti ti-category"></i> קטגוריות</div>
+      <div class="cat-list">
+        <div class="cat-item" onclick="setActiveTab('הגברה וסאונד')">
+          <div class="cat-item-left"><i class="ti ti-speakerphone"></i> הגברה וסאונד</div>
+          <span class="cat-count">54</span>
+        </div>
+        <div class="cat-item" onclick="setActiveTab('צילום ווידאו')">
+          <div class="cat-item-left"><i class="ti ti-camera"></i> צילום ווידאו</div>
+          <span class="cat-count">47</span>
+        </div>
+        <div class="cat-item" onclick="setActiveTab('קייטרינג')">
+          <div class="cat-item-left"><i class="ti ti-chef-hat"></i> קייטרינג</div>
+          <span class="cat-count">63</span>
+        </div>
+        <div class="cat-item" onclick="setActiveTab('מוזיקה ומנגנים')">
+          <div class="cat-item-left"><i class="ti ti-music"></i> מוזיקה ומנגנים</div>
+          <span class="cat-count">38</span>
+        </div>
+        <div class="cat-item" onclick="setActiveTab('עיצוב ופרחים')">
+          <div class="cat-item-left"><i class="ti ti-flower"></i> עיצוב ופרחים</div>
+          <span class="cat-count">29</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget">
+      <div class="widget-title"><i class="ti ti-star"></i> ספקים מובילים</div>
+      <div class="supplier-item">
+        <div class="supplier-avatar">ש״ב</div>
+        <div>
+          <div class="supplier-name">שלמה בלושטיין</div>
+          <div class="supplier-type">הגברה</div>
+          <div class="supplier-stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="supplier-item">
+        <div class="supplier-avatar">ד״ל</div>
+        <div>
+          <div class="supplier-name">דוד לוין צילום</div>
+          <div class="supplier-type">צלם אירועים</div>
+          <div class="supplier-stars">★★★★☆</div>
+        </div>
+      </div>
+      <div class="supplier-item">
+        <div class="supplier-avatar">מ״ה</div>
+        <div>
+          <div class="supplier-name">מטעמי הרים</div>
+          <div class="supplier-type">קייטרינג כשר</div>
+          <div class="supplier-stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget">
+      <div class="widget-title"><i class="ti ti-bolt"></i> קישורים מהירים</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a href="#" style="display:flex;align-items:center;gap:8px;font-size:0.9rem;font-weight:500;"><i class="ti ti-plus-circle" style="font-size:18px;color:var(--accent);"></i> רשום את העסק שלך</a>
+        <a href="#" style="display:flex;align-items:center;gap:8px;font-size:0.9rem;font-weight:500;"><i class="ti ti-help-circle" style="font-size:18px;color:var(--accent);"></i> שאל שאלה</a>
+        <a href="#" style="display:flex;align-items:center;gap:8px;font-size:0.9rem;font-weight:500;"><i class="ti ti-book" style="font-size:18px;color:var(--accent);"></i> מדריכים וטיפים</a>
+      </div>
+    </div>
+
+    <div style="background:#111;border-radius:10px;padding:1.25rem;color:#fff;text-align:center;border:2px solid var(--accent);">
+      <div style="font-size:1.5rem;margin-bottom:8px;">🎤</div>
+      <div style="font-weight:700;margin-bottom:6px;">שלמה בלושטיין</div>
+      <div style="font-size:0.82rem;color:rgba(255,255,255,0.8);margin-bottom:12px;">הגברה לאירועים בירושלים, בית שמש וגוש עציון</div>
+      <a href="tel:0504124172" style="display:block;background:var(--accent);color:#fff;border-radius:7px;padding:9px;font-weight:600;font-size:0.88rem;">050-412-4172</a>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <strong>אירועים IL</strong> – הקהילה של מארגני האירועים בישראל<br>
+  <span style="font-size:0.8rem;margin-top:6px;display:block;">כל הזכויות שמורות © 2025</span>
+</footer>
+
+<!-- MODAL: NEW THREAD -->
+<div class="modal-overlay" id="newThreadModal">
+  <div class="modal">
+    <h2><i class="ti ti-edit" style="font-size:20px;vertical-align:-3px;margin-left:8px;"></i> פתח דיון חדש</h2>
+    <div class="form-group">
+      <label>שמך</label>
+      <input type="text" id="inp-author" placeholder="שם מלא">
+    </div>
+    <div class="form-group">
+      <label>כותרת הדיון</label>
+      <input type="text" id="inp-title" placeholder="כתוב כותרת ברורה ומדויקת...">
+    </div>
+    <div class="form-group">
+      <label>קטגוריה</label>
+      <select id="inp-cat">
+        <option>שאלות וטיפים</option>
+        <option>ספקים מומלצים</option>
+        <option>הגברה וסאונד</option>
+        <option>צילום ווידאו</option>
+        <option>קייטרינג</option>
+        <option>מוזיקה ומנגנים</option>
+        <option>עיצוב ופרחים</option>
+        <option>כללי</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>תוכן הדיון</label>
+      <textarea id="inp-content" placeholder="שתף את שאלתך, ניסיון, או המלצה..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn-cancel" onclick="closeModal('newThreadModal')">ביטול</button>
+      <button class="btn-submit" onclick="submitPost()">פרסם דיון</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: LOGIN -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <h2>הצטרפות / כניסה לקהילה</h2>
+    <div class="form-group"><label>שם מלא</label><input type="text" placeholder="שם ושם משפחה"></div>
+    <div class="form-group"><label>אימייל</label><input type="email" placeholder="your@email.com" dir="ltr"></div>
+    <div class="form-group"><label>סיסמה</label><input type="password" placeholder="לפחות 8 תווים"></div>
+    <div class="form-actions">
+      <button class="btn-cancel" onclick="closeModal('loginModal')">ביטול</button>
+      <button class="btn-submit">הצטרפות בחינם</button>
     </div>
   </div>
 </div>
 
 <script>
-  const COLORS = ['#1B2A4A','#C8952A','#1A7A4A','#6B3A8A'];
+  let allPosts = [];
+  let activeCategory = 'הכל';
+
+  const COLORS = ['#1B2A4A','#c9a84c','#2e7d4f','#6B3A8A','#b03030'];
   const color = n => COLORS[n.charCodeAt(0) % COLORS.length];
   const ago = d => {
     const s = (Date.now() - new Date(d)) / 1000;
@@ -79,30 +289,80 @@
   };
 
   async function load() {
-    const posts = await fetch('/api/posts').then(r => r.json());
-    document.getElementById('stat-posts').textContent = posts.length;
-    document.getElementById('posts-list').innerHTML = posts.length ? posts.map(p => `
-      <div class="post-card">
-        <div class="avatar" style="background:${color(p.author)}">${p.author[0]}</div>
-        <div>
-          <span class="badge">${p.category}</span>
-          <div class="post-title">${p.title}</div>
-          <div class="post-meta">${p.author} · ${ago(p.created_at)} · 💬 ${p.replies_count||0}</div>
-        </div>
-      </div>`).join('') : '<div class="loading">אין פוסטים עדיין</div>';
+    try {
+      const posts = await fetch('/api/posts').then(r => r.json());
+      allPosts = posts;
+      document.getElementById('stat-posts').textContent = posts.length;
+      render();
+    } catch(e) {
+      document.getElementById('posts-list').innerHTML = '<div class="loading">שגיאה בטעינה</div>';
+    }
   }
 
-  function openModal() { document.getElementById('modal').style.display='flex'; }
-  function closeModal() { document.getElementById('modal').style.display='none'; }
+  function render() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    let filtered = allPosts;
+    if (activeCategory !== 'הכל') filtered = filtered.filter(p => p.category === activeCategory);
+    if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search) || p.content.toLowerCase().includes(search));
+
+    document.getElementById('posts-list').innerHTML = filtered.length ? filtered.map(p => `
+      <div class="thread-card">
+        <div class="thread-avatar" style="background:${color(p.author)}">${p.author[0]}</div>
+        <div class="thread-body">
+          <div class="thread-top">
+            <div>
+              <span class="badge badge-cat">${p.category}</span>
+              <div class="thread-title" style="margin-top:5px">${p.title}</div>
+            </div>
+            <div class="thread-stats">
+              <div class="thread-stat"><strong>${p.replies_count||0}</strong><span>תגובות</span></div>
+            </div>
+          </div>
+          <div class="thread-meta">
+            <span><i class="ti ti-user"></i> ${p.author}</span>
+            <span><i class="ti ti-clock"></i> ${ago(p.created_at)}</span>
+          </div>
+        </div>
+      </div>`).join('') : '<div class="loading">אין דיונים בקטגוריה זו</div>';
+  }
+
+  function filterPosts() { render(); }
+
+  function setTab(el, cat) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    activeCategory = cat;
+    render();
+  }
+
+  function setActiveTab(cat) {
+    activeCategory = cat;
+    document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); if(t.textContent===cat) t.classList.add('active'); });
+    render();
+  }
+
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+  });
 
   async function submitPost() {
     const title = document.getElementById('inp-title').value.trim();
     const content = document.getElementById('inp-content').value.trim();
     const author = document.getElementById('inp-author').value.trim();
     const category = document.getElementById('inp-cat').value;
-    if (!title||!content||!author) { alert('נא למלא את כל השדות'); return; }
-    await fetch('/api/posts', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({title,content,author,category}) });
-    closeModal();
+    if (!title || !content || !author) { alert('נא למלא את כל השדות'); return; }
+    await fetch('/api/posts', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({title, content, author, category})
+    });
+    closeModal('newThreadModal');
+    document.getElementById('inp-title').value = '';
+    document.getElementById('inp-content').value = '';
+    document.getElementById('inp-author').value = '';
     load();
   }
 
